@@ -20,33 +20,42 @@ public class Board {
         return scoreboard.addPlayerToChart(player);
     }
 
+    // Generates a solvable maze and prints it
 	void initializeMaze(){
-		Random randomgenerator = new Random();	
+		Random randomgenerator = new Random();
+
 		// Generates a new maze until at least one solution is found
 		do{
-		for(int row=0;row<7;row++){
-			for(int column=0;column<7;column++){
-				isVisited[row][column]=false;
-				if(randomgenerator.nextInt(2)==1){
-					maze[row][column] = 'X';
-				}
-				else {
-					maze[row][column] = '-';
+			for(int row = 0; row < maze.length; row++){
+				for(int column = 0; column < maze.length; column++){
+
+                    // Resetting the isVisited property for the whole board
+                    isVisited[row][column] = false;
+
+                    if(randomgenerator.nextInt(2) == 1){
+						maze[row][column] = 'X';
+					}
+					else {
+						maze[row][column] = '-';
+					}
 				}
 			}
 		}
-		}
-		while(isSolvable(3, 3)==false);
-		playersCurrentRow = 3;
-		playersCurrentColumn = 3;
+		while(isSolvable(maze.length/2, maze.length/2) == false);
+
+        // Setting the players position to center
+        playersCurrentRow = maze.length/2;
+		playersCurrentColumn = maze.length/2;
 		
-		
+		// Adding the player
 		maze[playersCurrentRow][playersCurrentColumn] = '*';
 		printMaze();
-	}	
+	}
+
 	public void initializeScoreBoard(){
 		scoreboard = new HighScoreBoard();
-	}	
+	}
+
 	public boolean isSolvable(int row, int col){
 		if((row==6)||(col==6)||(row==0)||(col==0)){
 			isExit = true;
@@ -94,20 +103,21 @@ public class Board {
 				"R(right), U(up), D(down) ");
 		command = scanner.next();
 		int size = command.length();
-		if (!command.equals("exit")) {
+
+        if (!command.equals("exit")) {
 			if(command.equals("restart")){
                 isExit = false;
                 initializeMaze();
             }
             else if(command.equals("top")){
-                if(scoreboard.list.size()>0){
+                if(scoreboard.list.size() > 0){
                     scoreboard.printBoard();
                 }
                 else{
                     System.out.println("The High score board is empty!");
                 }
             }
-            else if(size>1){
+            else if(size > 1){
                 System.out.println("Invalid command!");
             }
             else {
@@ -120,81 +130,74 @@ public class Board {
 	}	
 	public  void movePlayer(char firstLetter){
 		if (firstLetter == 'L' || firstLetter == 'l') {
-			if (maze[playersCurrentRow][playersCurrentColumn - 1] != 'X') {
-				swapCells(playersCurrentRow, playersCurrentRow,
-						playersCurrentColumn, playersCurrentColumn - 1);
-				{
-					playersCurrentColumn--;
-					{
-						{
-							{
-								playersMovesCount++;
-							}
-						}
-					}
-				}
-			} else {
-				System.out.println("Invalid move!");
-				printMaze();
-			}
+            tryMoveLeft();
+
 		} else if (firstLetter == 'R' || firstLetter == 'r') {
-			if (maze[playersCurrentRow][playersCurrentColumn + 1] != 'X') {
-				swapCells(playersCurrentRow, playersCurrentRow,
-						playersCurrentColumn, playersCurrentColumn + 1);
-				System.out.println();
-				{
-					{
-						printMaze();
-						{
-							{
-								playersCurrentColumn++;
-								playersMovesCount++;
-							}
-						}
-					}
-				}
-			} else {
-				System.out.println("Invalid move!");
-				printMaze();
-			}
+			tryMoveRight();
+
 		} else if (firstLetter == 'U' || firstLetter == 'u') {
-			if (maze[playersCurrentRow - 1][playersCurrentColumn] != 'X') {
-				swapCells(playersCurrentRow, playersCurrentRow - 1,
-						playersCurrentColumn, playersCurrentColumn);
-				{
-					{
-						{
-							{
-								playersCurrentRow--;
-								playersMovesCount++;
-							}
-						}
-					}
-				}
-			} else {
-				System.out.println("Invalid move!");
-				printMaze();
-			}
+			tryMoveUp();
+
 		} else if (firstLetter == 'D' || firstLetter == 'd') {
-			if (maze[playersCurrentRow + 1][playersCurrentColumn] != 'X') {
-				swapCells(playersCurrentRow, playersCurrentRow + 1,
-						playersCurrentColumn, playersCurrentColumn);
-				{
-					playersCurrentRow++;
-					{
-						playersMovesCount++;
-					}
-				}
-			} else {
-				System.out.println("Invalid move!");
-				printMaze();
-			}
+			tryMoveDown();
 		} else {
 			System.out.println("Invalid command!");
 		}
 	}
 
-	boolean playerNotOnEdge() {
+    private void tryMoveDown() {
+        if (maze[playersCurrentRow + 1][playersCurrentColumn] != 'X') {
+            swapCells(playersCurrentRow, playersCurrentRow + 1,
+                    playersCurrentColumn, playersCurrentColumn);
+            playersCurrentRow++;
+            playersMovesCount++;
+        } else {
+            System.out.println("Invalid move!");
+            printMaze();
+        }
+    }
+
+    private void tryMoveUp() {
+        if (maze[playersCurrentRow - 1][playersCurrentColumn] != 'X') {
+            swapCells(playersCurrentRow, playersCurrentRow - 1,
+                    playersCurrentColumn, playersCurrentColumn);
+            playersCurrentRow--;
+            playersMovesCount++;
+        } else {
+            System.out.println("Invalid move!");
+            printMaze();
+        }
+    }
+
+    private void tryMoveRight() {
+        if (maze[playersCurrentRow][playersCurrentColumn + 1] != 'X') {
+            swapCells(playersCurrentRow, playersCurrentRow,
+                    playersCurrentColumn, playersCurrentColumn + 1);
+            System.out.println();
+            printMaze();
+            playersCurrentColumn++;
+            playersMovesCount++;
+
+        } else {
+            System.out.println("Invalid move!");
+            printMaze();
+        }
+    }
+
+    private void tryMoveLeft() {
+        if(maze[playersCurrentRow][playersCurrentColumn - 1] != 'X') {
+            swapCells(playersCurrentRow, playersCurrentRow,
+                    playersCurrentColumn, playersCurrentColumn - 1);
+
+            playersCurrentColumn--;
+            playersMovesCount++;
+        } else {
+            System.out.println("Invalid move!");
+            printMaze();
+        }
+    }
+
+    boolean playerNotOnEdge() {
 		return (playersCurrentColumn != 0) && (playersCurrentColumn != maze.length - 1) &&
 				(playersCurrentRow != 0) && (playersCurrentRow != maze.length - 1);
 	}
