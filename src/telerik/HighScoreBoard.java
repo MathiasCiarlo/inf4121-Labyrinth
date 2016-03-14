@@ -2,10 +2,10 @@ package telerik;
 
 import java.util.LinkedList;
 
-
 public class HighScoreBoard {
 	LinkedList<Player> list;
 	public final int boardSize = 5;
+
 	public HighScoreBoard(){
 		list = new LinkedList<Player>();
 	}
@@ -42,10 +42,11 @@ public class HighScoreBoard {
         return false;
     }
 
+    // Prints the highscore list to the standard output
 	void printBoard(){
 		System.out.println("Score :");
 		for(int i = 0; i < list.size(); i++){
-			Player p = (Player) list.get(i);
+			Player p = list.get(i);
 			System.out.print((i + 1) + ". Name - " + p.getName() + " ");
 			System.out.print("Escaped in " + p.getMovesCount() + " moves");
 			System.out.println();

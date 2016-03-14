@@ -60,10 +60,10 @@ public class Board {
 	public boolean isSolvable(int row, int col){
 
         // Base case - we have escaped the maze
-        if((row == maze.length-1) || (col == maze.length-1) || (row == 0) || (col == 0)){
+        if((row == maze.length - 1) || (col == maze.length - 1) || (row == 0) || (col == 0)){
             isExit = true;
             return isExit;
-        }
+        }tryMoveUp();tryMoveUp();
 
         // Mark the cell as visited
         isVisited[row][col] = true;

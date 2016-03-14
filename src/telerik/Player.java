@@ -9,10 +9,12 @@ public class Player {
         this.movesCount = movesCount;
     }
 
+    // Returns the name
     String getName() {
         return name;
     }
 
+    // Returns the number of moves
     int getMovesCount() {
         return movesCount;
     }
