@@ -1,5 +1,6 @@
 package telerik;
 
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -11,8 +12,13 @@ public class Board {
 	public String command;
 	public boolean isExit = false;
 	public int playersMovesCount = 0;
-	HighScoreBoard board;
-	
+	HighScoreBoard scoreboard;
+
+    // Creates a player object and inserts it in the HighScoreBoard
+    public boolean addPlayerToChart(String name) {
+        Player player = new Player(name, playersMovesCount);
+        return scoreboard.addPlayerToChart(player);
+    }
 
 	void initializeMaze(){
 		Random randomgenerator = new Random();	
@@ -39,7 +45,7 @@ public class Board {
 		printMaze();
 	}	
 	public void initializeScoreBoard(){
-		board = new HighScoreBoard();
+		scoreboard = new HighScoreBoard();
 	}	
 	public boolean isSolvable(int row, int col){
 		if((row==6)||(col==6)||(row==0)||(col==0)){
@@ -94,8 +100,8 @@ public class Board {
                 initializeMaze();
             }
             else if(command.equals("top")){
-                if(board.list.size()>0){
-                    board.printBoard(board.list);
+                if(scoreboard.list.size()>0){
+                    scoreboard.printBoard();
                 }
                 else{
                     System.out.println("The High score board is empty!");
@@ -189,8 +195,8 @@ public class Board {
 	}
 
 	boolean playerNotOnEdge() {
-		return (playersCurrentColumn != 0) && (playersCurrentColumn != 6) &&
-				(playersCurrentRow != 0) && (playersCurrentRow != 6);
+		return (playersCurrentColumn != 0) && (playersCurrentColumn != maze.length - 1) &&
+				(playersCurrentRow != 0) && (playersCurrentRow != maze.length - 1);
 	}
 		
 	
@@ -204,6 +210,12 @@ public class Board {
 			printMaze();
 		}
 	}
-	
-	
+
+    public void printHighscore() {
+        scoreboard.printBoard();
+    }
+
+    public int getMoveCount() {
+        return playersMovesCount;
+    }
 }

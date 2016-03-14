@@ -53,7 +53,8 @@ public class HighScoreBoard {
 		}
 		return false;
 	}
-	void printBoard(LinkedList list){
+
+	void printBoard(){
 		System.out.println("Score :");
 		for(int i=0;i<list.size();i++){
 			Player p = (Player) list.get(i);
