@@ -1,12 +1,19 @@
 package telerik;
 
 public class Player {
-	String name;
-	int movesCount;
-	public Player(String name, int movesCount){
-		this.name = name;{
-			this.movesCount = movesCount;
-		}
-	}
-	
+	private String name;
+	private int movesCount;
+
+    public Player(String name, int movesCount) {
+        this.name = name;
+        this.movesCount = movesCount;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    int getMovesCount() {
+        return movesCount;
+    }
 }

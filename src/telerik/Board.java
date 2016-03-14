@@ -56,47 +56,48 @@ public class Board {
 		scoreboard = new HighScoreBoard();
 	}
 
+    // Check if the labyrinth is solvable
 	public boolean isSolvable(int row, int col){
-		if((row==6)||(col==6)||(row==0)||(col==0)){
-			isExit = true;
-			return isExit;
+
+        // Base case - we have escaped the maze
+        if((row == maze.length-1) || (col == maze.length-1) || (row == 0) || (col == 0)){
+            isExit = true;
+            return isExit;
+        }
+
+        // Mark the cell as visited
+        isVisited[row][col] = true;
+
+		if((maze[row-1][col] == '-') &&
+                (isVisited[row-1][col] == false)) {
+            isSolvable(row - 1, col);
 		}
-		if((maze[row-1][col]=='-')){
-			if((isVisited[row-1][col]==false)) {
-				isVisited[row][col] = true;
-				isSolvable(row - 1, col);
-			}
+		if((maze[row+1][col] == '-') &&
+                (isVisited[row+1][col] == false)){
+			isSolvable(row + 1, col);
 		}
-		if((maze[row+1][col]=='-')){
-			if((isVisited[row+1][col]==false)){
-			isVisited[row][col]=true;
-			isSolvable(row+1, col);
-			}
-		}
-		if((maze[row][col-1]=='-')){
-			if((isVisited[row][col-1]==false)) {
-				isVisited[row][col] = true;
-				isSolvable(row, col - 1);
-			}
-		}
-		if((maze[row][col+1]=='-')){
-			if((isVisited[row][col+1]==false)) {
-				isVisited[row][col] = true;
-				isSolvable(row, col + 1);
-			}
-		}
+		if((maze[row][col - 1]=='-') &&
+                (isVisited[row][col-1] == false)) {
+            isSolvable(row, col - 1);
+        }
+		if((maze[row][col+1]=='-') &&
+                (isVisited[row][col+1] == false)) {
+            isSolvable(row, col + 1);
+        }
 		return isExit;
 	}
+
+    // Prints the maze to standard output
 	void printMaze(){
-		for(int row=0;row<7;row++){
-			for(int column=0;column<7;column++){
-				System.out.print(maze[row][column]+" ");
+		for(int row = 0; row < 7; row++) {
+			for(int column=0; column <7; column++){
+				System.out.print(maze[row][column] + " ");
 			}
-			{
-				System.out.println();
-			}
+            System.out.println();
 		}
-	}	
+	}
+
+    // Reads a command from standard input
 	public void inputCommand(){
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter your next move : L(left), " +
@@ -127,7 +128,9 @@ public class Board {
 			System.out.println("Good bye!");
 			System.exit(0);
 		}
-	}	
+	}
+
+    // Check which direction the player wants to move
 	public  void movePlayer(char firstLetter){
 		if (firstLetter == 'L' || firstLetter == 'l') {
             tryMoveLeft();
@@ -140,11 +143,13 @@ public class Board {
 
 		} else if (firstLetter == 'D' || firstLetter == 'd') {
 			tryMoveDown();
+
 		} else {
 			System.out.println("Invalid command!");
 		}
 	}
 
+    // Check if the player can move down
     private void tryMoveDown() {
         if (maze[playersCurrentRow + 1][playersCurrentColumn] != 'X') {
             swapCells(playersCurrentRow, playersCurrentRow + 1,
@@ -157,6 +162,7 @@ public class Board {
         }
     }
 
+    // Check if the player can move up
     private void tryMoveUp() {
         if (maze[playersCurrentRow - 1][playersCurrentColumn] != 'X') {
             swapCells(playersCurrentRow, playersCurrentRow - 1,
@@ -169,6 +175,7 @@ public class Board {
         }
     }
 
+    // Check if the player can move to the right
     private void tryMoveRight() {
         if (maze[playersCurrentRow][playersCurrentColumn + 1] != 'X') {
             swapCells(playersCurrentRow, playersCurrentRow,
@@ -184,6 +191,7 @@ public class Board {
         }
     }
 
+    // Check if the player can move to the left
     private void tryMoveLeft() {
         if(maze[playersCurrentRow][playersCurrentColumn - 1] != 'X') {
             swapCells(playersCurrentRow, playersCurrentRow,
@@ -197,12 +205,13 @@ public class Board {
         }
     }
 
+    // Returns true if the player is not on an edge
     boolean playerNotOnEdge() {
 		return (playersCurrentColumn != 0) && (playersCurrentColumn != maze.length - 1) &&
 				(playersCurrentRow != 0) && (playersCurrentRow != maze.length - 1);
 	}
 		
-	
+	// Update the players position on maze
 	void swapCells(int currentRow, int newRow, int currentColumn, int newColumn){
 		boolean evaluate=true;//evaluate()
 		if(evaluate) {
@@ -214,11 +223,13 @@ public class Board {
 		}
 	}
 
+    // Prints the highscore
     public void printHighscore() {
         scoreboard.printBoard();
     }
 
-    public int getMoveCount() {
+    // Returns the number of moves
+    public int getMovesCount() {
         return playersMovesCount;
     }
 }
