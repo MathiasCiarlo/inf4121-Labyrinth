@@ -2,21 +2,22 @@ package telerik;
 
 import java.util.Scanner;
 
-
-
 public class Game {
+    private final static int boardSize = 6;
+
 	public static void main(String[] args){
-		generirane labyrinth = new generirane();
+		Board labyrinth = new Board();
 		labyrinth.initializeScoreBoard();
-		while(true){
+
+        // Main game loop, handles every game
+        while(true){
 			labyrinth.initializeMaze();
-			while((labyrinth.playersCurrentColumn!=0)&&(labyrinth.playersCurrentColumn!=6)
-					&&(labyrinth.playersCurrentRow!=0)&&(labyrinth.playersCurrentRow!=6)){
+
+            // Inner game loop, active while the player is moving around
+            while(labyrinth.playerNotOnEdge()) {
 				labyrinth.inputCommand();
-				
-				
-				
-			}
+            }
+
 			System.out.println();
 			labyrinth.printMaze();
 			System.out.println("Congratulations! You escaped in "+labyrinth.playersMovesCount+" moves.");

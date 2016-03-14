@@ -3,9 +3,7 @@ package telerik;
 import java.util.Random;
 import java.util.Scanner;
 
-
-
-public class generirane {
+public class Board {
 	public boolean isVisited[][] = new boolean[7][7];
 	public char maze[][] = new char[7][7];
 	public int playersCurrentRow;
@@ -188,6 +186,11 @@ public class generirane {
 		} else {
 			System.out.println("Invalid command!");
 		}
+	}
+
+	boolean playerNotOnEdge() {
+		return (playersCurrentColumn != 0) && (playersCurrentColumn != 6) &&
+				(playersCurrentRow != 0) && (playersCurrentRow != 6);
 	}
 		
 	
